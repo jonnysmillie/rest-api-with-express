@@ -3,17 +3,29 @@
 // load modules
 var express = require('express');
 var morgan = require('morgan');
+var pug = require('pug');
 
 var app = express();
 
 // set our port
 app.set('port', process.env.PORT || 5000);
 
+//set up app to use pug templates
+app.set('view engine', 'pug')
+
 // morgan gives us http request logging
 app.use(morgan('dev'));
 
 // setup our static route to serve files from the "public" folder
-app.use('/', express.static('public'));
+//app.use(express.static('/public'));
+app.set('views', 'src/public');
+
+
+app.get('/', function (req, res) {
+  res.render('index')
+})
+app.use('/error', express.static('public/error.pug'));
+
 
 // catch 404 and forward to global error handler
 app.use(function(req, res, next) {
@@ -26,6 +38,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
+  	title: 'Error',
     message: err.message,
     error: {}
   });
