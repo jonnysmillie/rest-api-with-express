@@ -4,6 +4,7 @@
 var express = require('express');
 var morgan = require('morgan');
 var pug = require('pug');
+var mongoose = require('mongoose');
 
 var app = express();
 
@@ -19,6 +20,18 @@ app.use(morgan('dev'));
 // setup our static route to serve files from the "public" folder
 //app.use(express.static('/public'));
 app.set('views', 'src/public');
+
+// set up the database connections
+var mongoDB = 'mongodb://127.0.0.1/27017';
+mongoose.connect(mongoDB);
+//Get the default connection
+var db = mongoose.connection;
+//Bind connection to error event (to get notification of connection errors)
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+// log successful connection to the database
+db.once('open', function() {
+  console.log('Database connections successfully established.')
+});
 
 
 app.get('/', function (req, res) {
