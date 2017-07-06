@@ -19,7 +19,7 @@ app.use(morgan('dev'));
 
 // setup our static route to serve files from the "public" folder
 //app.use(express.static('/public'));
-app.set('views', 'src/public');
+app.set('views', 'src/public/views');
 
 // set up the database connections
 var mongoDB = 'mongodb://127.0.0.1/27017';
@@ -33,9 +33,11 @@ db.once('open', function() {
   console.log('Database connections successfully established.')
 });
 
+//var models = require('/models')(mongoose);
+
 
 app.get('/', function (req, res) {
-  res.render('index')
+  res.render('index', {title: "REST API with Express", message: "REST API with Express"})
 })
 app.use('/error', express.static('public/error.pug'));
 
